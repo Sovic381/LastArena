@@ -16,6 +16,8 @@ namespace LastArena
         //Déclaration
         //terrain
         Ground Ground;
+        //Joueur
+        Player Player;
 
         public Game1()
         {
@@ -35,6 +37,9 @@ namespace LastArena
             //initialisation
             //Terrain
             Ground = new Ground();
+            //Joueur (NBanimation, TailleX,TailleY)
+            Player = new Player(1, 20, 20);
+            
 
             base.Initialize();
         }
@@ -53,6 +58,9 @@ namespace LastArena
             //Terrain
             Ground.Texture = Content.Load<Texture2D>("Ground");
             Ground.Position = new Vector2(0, 0);
+            //Joueur
+            Player.Texture = Content.Load<Texture2D>("Player");
+            Player.Position = new Vector2(400, 240);
 
         }
 
@@ -76,6 +84,8 @@ namespace LastArena
                 Exit();
 
             // TODO: Add your update logic here
+            //Joueur
+            Player.UpdateFrame(gameTime);
 
             base.Update(gameTime);
         }
@@ -93,6 +103,9 @@ namespace LastArena
             spriteBatch.Begin();
             //Terrain
             Ground.Draw(spriteBatch);
+            //Joueur
+            Player.DrawAnimation(spriteBatch);
+
             spriteBatch.End();
 
 

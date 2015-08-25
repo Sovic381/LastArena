@@ -8,6 +8,11 @@ namespace LastArena.Core
 {
     class Player : GameObject
     {
+        //Constructeur
+        public Player(int totalAnimationFrames, int frameWidth, int frameHeight)
+            : base(totalAnimationFrames, frameWidth, frameHeight)
+        {
+        }
 
     }
 }
