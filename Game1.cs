@@ -84,6 +84,8 @@ namespace LastArena
                 Exit();
 
             // TODO: Add your update logic here
+            //récupération des touches
+            Player.Move(Keyboard.GetState());
             //Joueur
             Player.UpdateFrame(gameTime);
 

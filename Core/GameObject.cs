@@ -17,7 +17,9 @@ namespace LastArena.Core
         // Durée de visibilité d'une image
         public float frameTime = 0.1f;
         // Indice de l'image en cours
-        public int frameIndex;
+        //public int frameIndex;
+        //selon tuto
+        public framesIndex frameIndex;
 
         //Index des Images pour animation (pour l'instant selon tuto)
         public enum framesIndex
@@ -31,6 +33,18 @@ namespace LastArena.Core
             TOP_1 = 6,
             TOP_2 = 7
         }
+        //Direction du joueur
+
+        public Direction direction;
+
+        public enum Direction
+        {
+            LEFT = 0,
+            RIGHT = 1,
+            TOP = 2,
+            BOTTOM = 3
+        }
+
 
         //code selon tuto pour propriété des images d'animation
         private int _totalFrames;
@@ -48,6 +62,7 @@ namespace LastArena.Core
         {
             get { return _frameHeight; }
         }
+
 
         //Constructeur
         public GameObject()
@@ -83,25 +98,37 @@ namespace LastArena.Core
         //calcul du temps passé pour savoir quand changer d'animation
         public void UpdateFrame(GameTime gameTime)
         {
-            time += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            while (time > frameTime)
+            switch (direction)
             {
-                frameIndex++;
-                time = 0f;
+                case Direction.TOP:
+                    if (frameIndex == framesIndex.TOP_1)
+                        frameIndex = framesIndex.TOP_2;
+                    else
+                        frameIndex = framesIndex.TOP_1;
+                    break;
+                case Direction.LEFT:
+                    if (frameIndex == framesIndex.LEFT_1)
+                        frameIndex = framesIndex.LEFT_2;
+                    else
+                        frameIndex = framesIndex.LEFT_1;
+                    break;
+                case Direction.BOTTOM:
+                    if (frameIndex == framesIndex.BOTTOM_1)
+                        frameIndex = framesIndex.BOTTOM_2;
+                    else
+                        frameIndex = framesIndex.BOTTOM_1;
+                    break;
+                case Direction.RIGHT:
+                    if (frameIndex == framesIndex.RIGHT_1)
+                        frameIndex = framesIndex.RIGHT_2;
+                    else
+                        frameIndex = framesIndex.RIGHT_1;
+                    break;
             }
-            if (frameIndex > _totalFrames)
-                frameIndex = 0;
+            //selon tuto
+            Source = new Rectangle((int)frameIndex * frameWidth, 0, frameWidth, frameHeight);
 
-            Source = new Rectangle(
-                frameIndex * frameWidth,
-                0,
-                frameWidth,
-                frameHeight);
+
         }
-
-
-
-
     }
 }
