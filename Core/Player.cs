@@ -14,31 +14,37 @@ namespace LastArena.Core
         {
             //Image d'animation de base du joueur
             direction = Direction.RIGHT;
-            frameIndex = framesIndex.RIGHT_1;
-
+            frameIndex = framesIndex.RIGHT_1;      
         }
+
+        //déclaration
+        public Boolean IsPlayerShooting = false;
 
         public void Move(KeyboardState state)
         {
             if (state.IsKeyDown(Keys.W))
             {
                 direction = Direction.TOP;
-                Position.Y -= 1;
+                Position.Y -= 2;
             }
             if (state.IsKeyDown(Keys.A))
             {
                 direction = Direction.LEFT;
-                Position.X -= 1;
+                Position.X -= 2;
             }
             if (state.IsKeyDown(Keys.S))
             {
                 direction = Direction.BOTTOM;
-                Position.Y += 1;
+                Position.Y += 2;
             }
             if (state.IsKeyDown(Keys.D))
             {
                 direction = Direction.RIGHT;
-                Position.X += 1;
+                Position.X += 2;
+            }//Tir du joueur
+            if(state.IsKeyDown(Keys.Space))
+            {
+                IsPlayerShooting = true;
             }
         }
 

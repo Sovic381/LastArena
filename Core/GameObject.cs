@@ -37,6 +37,7 @@ namespace LastArena.Core
 
         public Direction direction;
 
+
         public enum Direction
         {
             LEFT = 0,
@@ -65,6 +66,7 @@ namespace LastArena.Core
 
 
         //Constructeur
+        
         public GameObject()
         {
         }
