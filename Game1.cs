@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using LastArena.Core;
 
 namespace LastArena
 {
@@ -11,6 +12,10 @@ namespace LastArena
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        //Déclaration
+        //terrain
+        Ground Ground;
 
         public Game1()
         {
@@ -27,6 +32,9 @@ namespace LastArena
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            //initialisation
+            //Terrain
+            Ground = new Ground();
 
             base.Initialize();
         }
@@ -41,6 +49,11 @@ namespace LastArena
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            //Chargement du contenu
+            //Terrain
+            Ground.Texture = Content.Load<Texture2D>("Ground");
+            Ground.Position = new Vector2(0, 0);
+
         }
 
         /// <summary>
@@ -76,6 +89,12 @@ namespace LastArena
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            //affichage
+            spriteBatch.Begin();
+            //Terrain
+            Ground.Draw(spriteBatch);
+            spriteBatch.End();
+
 
             base.Draw(gameTime);
         }
