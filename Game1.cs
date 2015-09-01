@@ -23,7 +23,7 @@ namespace LastArena
         //Joueur
         Player Player;
         //tir
-        List<Shot> Shot = new List<Shot>();
+        List<Shot> Shots = new List<Shot>();
         public float fTimeShot = 0.0f;
         //private Texture2D imgShot;
         //Ennemis
@@ -126,22 +126,22 @@ namespace LastArena
             #region tir
             // tout ce qui est dans cette boucle ne s'execute qu'une seule fois
             // pour créer un nouveau tir
-            if(Player.IsPlayerShooting == true && fTimeShot >= 200.0f )
+            if (Player.IsPlayerShooting && fTimeShot >= 200.0f)
             {
-                Shot.Add(new Shot(8, 8));
+                Shots.Add(new Shot(8, 8));
                 Player.IsPlayerShooting = false;
                 fTimeShot = 0.0f;
 
-                for (int i = Shot.Count - 1; i < Shot.Count; i++)
+                for (int i = Shots.Count - 1; i < Shots.Count; i++)
                 {
                     //postion des tirs
-                    Shot[i].Position.X = Player.Position.X + 4;
-                    Shot[i].Position.Y = Player.Position.Y + 4;
-                    Shot[i].Texture = Content.Load<Texture2D>("shot");
+                    Shots[i].Position.X = Player.Position.X + 4;
+                    Shots[i].Position.Y = Player.Position.Y + 4;
+                    Shots[i].Texture = Content.Load<Texture2D>("shot");
 
                     //direction des tirs
-
-                    if (MouseState.X >= Player.Position.X - 20 && MouseState.X <= Player.Position.X + 40 && MouseState.Y < Player.Position.Y)
+                    #region ancien
+                    /*          if (MouseState.X >= Player.Position.X - 20 && MouseState.X <= Player.Position.X + 40 && MouseState.Y < Player.Position.Y)
                     {
                         //Haut
                         Shot[i].iDirection = 1;
@@ -181,53 +181,72 @@ namespace LastArena
                         //diagonal haut gauche
                         Shot[i].iDirection = 8;
                     }
+                    */
+                    #endregion
+                    double dblTemp = 1.0 * (MouseState.Y - Player.Position.Y) / (MouseState.X - Player.Position.X );
+                    Shots[i].ShotAngle = (MouseState.X - Player.Position.X) > 0 ? Math.Atan(dblTemp) : Math.Atan(dblTemp) + Math.PI;
 
                 }
+                   
             }
             //déplacement
-            for (int i = 0; i < Shot.Count; i++)
+            #region ancien
+      /*      for (int i = 0; i < Shots.Count; i++)
             {
-                if (Shot[i].iDirection == 1)
+                if (Shots[i].iDirection == 1)
                 {
                     //Haut
-                    Shot[i].Position.Y -= 4;
+                    Shots[i].Position.Y -= 4;
                 }
-                else if (Shot[i].iDirection == 2)
+                else if (Shots[i].iDirection == 2)
                 {
-                    Shot[i].Position.X += 3;
-                    Shot[i].Position.Y -= 3;
+                    Shots[i].Position.X += 4;
+                    Shots[i].Position.Y -= 4;
                 }
-                else if (Shot[i].iDirection == 3)
+                else if (Shots[i].iDirection == 3)
                 {
                     //droite
-                    Shot[i].Position.X += 4;
+                    Shots[i].Position.X += 4;
                 }
-                else if (Shot[i].iDirection == 4)
+                else if (Shots[i].iDirection == 4)
                 {
-                    Shot[i].Position.X += 3;
-                    Shot[i].Position.Y += 3;
+                    Shots[i].Position.X += 4;
+                    Shots[i].Position.Y += 4;
                 }
-                else if (Shot[i].iDirection == 5)
+                else if (Shots[i].iDirection == 5)
                 {
                     //bas
-                    Shot[i].Position.Y += 4;
+                    Shots[i].Position.Y += 4;
                 }
-                else if (Shot[i].iDirection == 6)
+                else if (Shots[i].iDirection == 6)
                 {
-                    Shot[i].Position.X -= 3;
-                    Shot[i].Position.Y += 3;
+                    Shots[i].Position.X -= 4;
+                    Shots[i].Position.Y += 4;
                 }
-                else if (Shot[i].iDirection == 7)
+                else if (Shots[i].iDirection == 7)
                 {
                     //gauche
-                    Shot[i].Position.X -= 4;
+                    Shots[i].Position.X -= 4;
                 }
-                else if (Shot[i].iDirection == 8)
+                else if (Shots[i].iDirection == 8)
                 {
-                    Shot[i].Position.X -= 3;
-                    Shot[i].Position.Y -= 3;
+                    Shots[i].Position.X -= 3;
+                    Shots[i].Position.Y -= 3;
                 }
+            }*/
+            #endregion
+            for (int i = 0; i < Shots.Count; i++)
+            {
+                Shots[i].Position.X += (float)(Shots[i].ShotSpeed * Math.Cos(Shots[i].ShotAngle));
+                Shots[i].Position.Y += (float)(Shots[i].ShotSpeed * Math.Sin(Shots[i].ShotAngle));
             }
+
+            //Version propre
+           /* foreach (Shot Shot in Shots)
+            {
+                Shot.Deplacement();
+            }*/
+
 
             #endregion
 
@@ -235,9 +254,7 @@ namespace LastArena
             Player.UpdateFrame(gameTime);
 
             //ennemis
-            #region ennemis
-
-            
+            #region ennemis           
 
             if (Enemy1.iRand == 0)
             {
@@ -343,34 +360,34 @@ namespace LastArena
 
             //Tue les ennemis
             //Ennemi 1
-            for (int i = 0; i < Shot.Count; i++)
+            for (int i = 0; i < Shots.Count; i++)
             {
-                if (Shot[i].Position.X >= Enemy1.Position.X && Shot[i].Position.X <= Enemy1.Position.X + 20 &&
-                    Shot[i].Position.Y >= Enemy1.Position.Y && Shot[i].Position.Y <= Enemy1.Position.Y + 20)
+                if (Shots[i].Position.X >= Enemy1.Position.X && Shots[i].Position.X <= Enemy1.Position.X + 20 &&
+                    Shots[i].Position.Y >= Enemy1.Position.Y && Shots[i].Position.Y <= Enemy1.Position.Y + 20)
                 {
-                    Enemy1.Position.X = 0;
-                    Enemy1.Position.Y = 0;
-                    Shot.RemoveAt(i);
+                    Enemy1.Position.X = 600;
+                    Enemy1.Position.Y = 140;
+                    Shots.RemoveAt(i);
                 }
             }       
             //Ennemi 2
-            for (int i = 0; i < Shot.Count; i++)
+            for (int i = 0; i < Shots.Count; i++)
             {
-                if (Shot[i].Position.X >= Enemy2.Position.X && Shot[i].Position.X <= Enemy2.Position.X + 20 &&
-                      Shot[i].Position.Y >= Enemy2.Position.Y && Shot[i].Position.Y <= Enemy2.Position.Y + 20)
+                if (Shots[i].Position.X >= Enemy2.Position.X && Shots[i].Position.X <= Enemy2.Position.X + 20 &&
+                      Shots[i].Position.Y >= Enemy2.Position.Y && Shots[i].Position.Y <= Enemy2.Position.Y + 20)
                 {
-                    Enemy2.Position.X = 0;
-                    Enemy2.Position.Y = 0;
-                    Shot.RemoveAt(i);
+                    Enemy2.Position.X = 550;
+                    Enemy2.Position.Y = 300;
+                    Shots.RemoveAt(i);
                 }
             }
             //supprime les tirs
-            for (int i = 0; i < Shot.Count; i++)
+            for (int i = 0; i < Shots.Count; i++)
             {
-                if (Shot[i].Position.X <= 0 || Shot[i].Position.X + 8 >= 800 ||
-                    Shot[i].Position.Y <= 0 || Shot[i].Position.Y + 8 >= 480)
+                if (Shots[i].Position.X <= 0 || Shots[i].Position.X + 8 >= 800 ||
+                    Shots[i].Position.Y <= 0 || Shots[i].Position.Y + 8 >= 480)
                 {
-                    Shot.RemoveAt(i);
+                    Shots.RemoveAt(i);
                 }
             }
             
@@ -395,9 +412,9 @@ namespace LastArena
             //Joueur
             Player.DrawAnimation(spriteBatch);
             //tir
-            for (int i = 0; i < Shot.Count; i++)
+            for (int i = 0; i < Shots.Count; i++)
             {
-                spriteBatch.Draw(Shot[i].Texture, new Vector2(Shot[i].Position.X, Shot[i].Position.Y), Color.White);
+                spriteBatch.Draw(Shots[i].Texture, new Vector2(Shots[i].Position.X, Shots[i].Position.Y), Color.White);
             }
             //ennemis
             Enemy1.Draw(spriteBatch);
@@ -405,7 +422,7 @@ namespace LastArena
             //Curseur
             if (MouseState.X >= 0 || MouseState.X <= Window.ClientBounds.Width || MouseState.Y >= 0 || MouseState.Y <= Window.ClientBounds.Height)
             {
-                spriteBatch.Draw(MouseTexture, new Vector2(MouseState.X - 10, MouseState.Y - 10), Color.White);
+                spriteBatch.Draw(MouseTexture, new Vector2(MouseState.X, MouseState.Y), Color.White);
             }
             
             spriteBatch.End();

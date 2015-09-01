@@ -15,5 +15,20 @@ namespace LastArena.Core
         //Direction des tirs (1 = haut, 2 = droite etc...)
         public int iDirection = 1;
 
+        //Angle
+        public double ShotAngle;
+
+        //vitesse projoectile
+        public double ShotSpeed = 4.0;
+
+        public void Deplacement()
+        {
+            //Version propre
+            /*
+            Position.X += (float)(ShotSpeed * Math.Cos(ShotAngle));
+            Position.Y += (float)(ShotSpeed * Math.Sin(ShotAngle));
+             * */
+        }
+
     }
 }
