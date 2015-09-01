@@ -29,6 +29,9 @@ namespace LastArena
         //Ennemis
         Enemies Enemy1;
         Enemies Enemy2;
+        //Curseur
+        MouseState MouseState;
+        private Texture2D MouseTexture;
         
 
         public Game1()
@@ -85,6 +88,9 @@ namespace LastArena
             Enemy2.Texture = Content.Load<Texture2D>("enemy");
             Enemy2.Position = new Vector2(550, 300);
             Enemy1.iRand = Enemy1.rand.Next(2);
+            //Curseur
+            MouseTexture = Content.Load<Texture2D>("Viseur");
+            
 
         }
 
@@ -113,11 +119,14 @@ namespace LastArena
 
             //récupération des touches
             Player.Move(Keyboard.GetState());
+            //Curseur
+            MouseState = Mouse.GetState();
+            
             //Tir
             #region tir
             // tout ce qui est dans cette boucle ne s'execute qu'une seule fois
             // pour créer un nouveau tir
-            if(Player.IsPlayerShooting == true && fTimeShot >= 300.0f )
+            if(Player.IsPlayerShooting == true && fTimeShot >= 200.0f )
             {
                 Shot.Add(new Shot(8, 8));
                 Player.IsPlayerShooting = false;
@@ -131,43 +140,93 @@ namespace LastArena
                     Shot[i].Texture = Content.Load<Texture2D>("shot");
 
                     //direction des tirs
-                    if (Player.direction == Player.Direction.RIGHT)
+
+                    if (MouseState.X >= Player.Position.X - 20 && MouseState.X <= Player.Position.X + 40 && MouseState.Y < Player.Position.Y)
                     {
-                        Shot[i].iDirection = 2;
-                    }
-                    else if (Player.direction == Player.Direction.LEFT)
-                    {
-                        Shot[i].iDirection = 4;
-                    }
-                    else if (Player.direction == Player.Direction.TOP)
-                    {
+                        //Haut
                         Shot[i].iDirection = 1;
                     }
-                    else if (Player.direction == Player.Direction.BOTTOM)
+                    else if (MouseState.X > Player.Position.X && MouseState.Y < Player.Position.Y - 20)
                     {
+                        //diagonal haut droite
+                        Shot[i].iDirection = 2;
+                    }
+                    else if(MouseState.Y >= Player.Position.Y - 20 && MouseState.Y <= Player.Position.Y +40 && MouseState.X > Player.Position.X)
+                    {
+                        //droite
                         Shot[i].iDirection = 3;
                     }
+                    else if (MouseState.Y > Player.Position.Y + 20 && MouseState.X > Player.Position.X + 40)
+                    {
+                        //diagonal bas droite
+                        Shot[i].iDirection = 4;
+                    }
+                    else if (MouseState.X >= Player.Position.X - 20 && MouseState.X <= Player.Position.X + 40 && MouseState.Y > Player.Position.Y + 40)
+                    {
+                        //bas
+                        Shot[i].iDirection = 5;
+                    }
+                    else if (MouseState.X < Player.Position.X && MouseState.Y > Player.Position.Y + 40)
+                    {
+                        //diagonal gauche bas
+                        Shot[i].iDirection = 6;
+                    }
+                    else if (MouseState.Y >= Player.Position.Y - 20 && MouseState.Y <= Player.Position.Y + 40 && MouseState.X < Player.Position.X)
+                    {
+                        //Gauche
+                        Shot[i].iDirection = 7;
+                    }
+                    else if (MouseState.Y < Player.Position.Y && MouseState.X < Player.Position.X)
+                    {
+                        //diagonal haut gauche
+                        Shot[i].iDirection = 8;
+                    }
+
                 }
             }
             //déplacement
             for (int i = 0; i < Shot.Count; i++)
             {
-                if (Shot[i].iDirection == 2)
+                if (Shot[i].iDirection == 1)
                 {
+                    //Haut
+                    Shot[i].Position.Y -= 4;
+                }
+                else if (Shot[i].iDirection == 2)
+                {
+                    Shot[i].Position.X += 3;
+                    Shot[i].Position.Y -= 3;
+                }
+                else if (Shot[i].iDirection == 3)
+                {
+                    //droite
                     Shot[i].Position.X += 4;
                 }
                 else if (Shot[i].iDirection == 4)
                 {
+                    Shot[i].Position.X += 3;
+                    Shot[i].Position.Y += 3;
+                }
+                else if (Shot[i].iDirection == 5)
+                {
+                    //bas
+                    Shot[i].Position.Y += 4;
+                }
+                else if (Shot[i].iDirection == 6)
+                {
+                    Shot[i].Position.X -= 3;
+                    Shot[i].Position.Y += 3;
+                }
+                else if (Shot[i].iDirection == 7)
+                {
+                    //gauche
                     Shot[i].Position.X -= 4;
                 }
-                else if (Shot[i].iDirection == 1)
+                else if (Shot[i].iDirection == 8)
                 {
-                    Shot[i].Position.Y -= 4;
+                    Shot[i].Position.X -= 3;
+                    Shot[i].Position.Y -= 3;
                 }
-                else if (Shot[i].iDirection == 3)
-                {
-                    Shot[i].Position.Y += 4;
-                }    
             }
 
             #endregion
@@ -343,6 +402,12 @@ namespace LastArena
             //ennemis
             Enemy1.Draw(spriteBatch);
             Enemy2.Draw(spriteBatch);
+            //Curseur
+            if (MouseState.X >= 0 || MouseState.X <= Window.ClientBounds.Width || MouseState.Y >= 0 || MouseState.Y <= Window.ClientBounds.Height)
+            {
+                spriteBatch.Draw(MouseTexture, new Vector2(MouseState.X - 10, MouseState.Y - 10), Color.White);
+            }
+            
             spriteBatch.End();
 
 
