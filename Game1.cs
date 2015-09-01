@@ -282,6 +282,29 @@ namespace LastArena
                 Player.Position.Y-=4;
             }
 
+            //Tue les ennemis
+            //Ennemi 1
+            for (int i = 0; i < Shot.Count; i++)
+            {
+                if (Shot[i].Position.X >= Enemy1.Position.X && Shot[i].Position.X <= Enemy1.Position.X + 20 &&
+                    Shot[i].Position.Y >= Enemy1.Position.Y && Shot[i].Position.Y <= Enemy1.Position.Y + 20)
+                {
+                    Enemy1.Position.X = 0;
+                    Enemy1.Position.Y = 0;
+                    Shot.RemoveAt(i);
+                }
+            }       
+            //Ennemi 2
+            for (int i = 0; i < Shot.Count; i++)
+            {
+                if (Shot[i].Position.X >= Enemy2.Position.X && Shot[i].Position.X <= Enemy2.Position.X + 20 &&
+                      Shot[i].Position.Y >= Enemy2.Position.Y && Shot[i].Position.Y <= Enemy2.Position.Y + 20)
+                {
+                    Enemy2.Position.X = 0;
+                    Enemy2.Position.Y = 0;
+                    Shot.RemoveAt(i);
+                }
+            }
             //supprime les tirs
             for (int i = 0; i < Shot.Count; i++)
             {
@@ -290,8 +313,8 @@ namespace LastArena
                 {
                     Shot.RemoveAt(i);
                 }
-
-            }                         
+            }
+            
             #endregion
 
             base.Update(gameTime);
