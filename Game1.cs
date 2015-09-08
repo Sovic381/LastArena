@@ -37,6 +37,8 @@ namespace LastArena
         List<EnemiesShot> EnemyShots2 = new List<EnemiesShot>();
         float fTimeEnemiesShots1 = 0.0f;
         float fTimeEnemiesShots2 = 0.0f;
+        //Texte
+        private SpriteFont Font;
         
         
         
@@ -97,7 +99,9 @@ namespace LastArena
             Enemy1.iRand = Enemy1.rand.Next(2);
             //Curseur
             MouseTexture = Content.Load<Texture2D>("Viseur");
-
+            //Texte
+            Font = Content.Load<SpriteFont>("Font");
+            
         }
 
         /// <summary>
@@ -261,7 +265,7 @@ namespace LastArena
 
 
             //Tir ennemis
-            if (fTimeEnemiesShots1 >= 2000.0f)
+            if (fTimeEnemiesShots1 >= 1200.0f)
             {
                 EnemyShots1.Add(new EnemiesShot(8, 8));
                 fTimeEnemiesShots1 = 0.0f;
@@ -272,7 +276,7 @@ namespace LastArena
                     EnemyShots1[i].Position.X = Enemy1.Position.X + 4;
                     EnemyShots1[i].Position.Y = Enemy1.Position.Y + 4;
                     EnemyShots1[i].Texture = Content.Load<Texture2D>("EnemyShot");
-
+                    
                     //direction
                     double dblAutre = 1.0 * (Player.Position.Y - Enemy1.Position.Y) / (Player.Position.X - Enemy1.Position.X);
                     EnemyShots1[i].ShotAngle = (Player.Position.X - Enemy1.Position.X) > 0 ? Math.Atan(dblAutre) : Math.Atan(dblAutre) + Math.PI;
@@ -290,7 +294,7 @@ namespace LastArena
             }
 
             //Tir Ennemi 2
-            if (fTimeEnemiesShots2 >= 2000.0f)
+            if (fTimeEnemiesShots2 >= 1200.0f)
             {
                 EnemyShots2.Add(new EnemiesShot(8, 8));
                 fTimeEnemiesShots2 = 0.0f;
@@ -452,8 +456,8 @@ namespace LastArena
                 if (Shots[i].Position.X >= Enemy1.Position.X && Shots[i].Position.X <= Enemy1.Position.X + 20 &&
                     Shots[i].Position.Y >= Enemy1.Position.Y && Shots[i].Position.Y <= Enemy1.Position.Y + 20)
                 {
-                    Enemy1.Position.X = 700;
-                    Enemy1.Position.Y = 140;
+                    Enemy1.Position.X = 780;
+                    Enemy1.Position.Y = 0;
                     Shots.RemoveAt(i);
                 }
             }       
@@ -463,12 +467,70 @@ namespace LastArena
                 if (Shots[i].Position.X >= Enemy2.Position.X && Shots[i].Position.X <= Enemy2.Position.X + 20 &&
                       Shots[i].Position.Y >= Enemy2.Position.Y && Shots[i].Position.Y <= Enemy2.Position.Y + 20)
                 {
-                    Enemy2.Position.X = 750;
-                    Enemy2.Position.Y = 300;
+                    Enemy2.Position.X = 780;
+                    Enemy2.Position.Y = 460;
                     Shots.RemoveAt(i);
                 }
             }
+
+            //Tue le joueur
+            for (int i = 0; i < EnemyShots1.Count; i++)
+            {
+                if (EnemyShots1[i].Position.X >= Player.Position.X && EnemyShots1[i].Position.X <= Player.Position.X + 20 &&
+                      EnemyShots1[i].Position.Y >= Player.Position.Y && EnemyShots1[i].Position.Y <= Player.Position.Y + 20)
+                {
+                    if (Player.iLife <= 0)
+                    {
+                        Player.Position.X = 0;
+                        Player.Position.Y = 0;
+                        Player.iLife = 10;
+                    }else
+                    {
+                        Player.iLife--;
+                    }
+                    
+                    EnemyShots1.RemoveAt(i);
+                }
+            }
+            for (int i = 0; i < EnemyShots2.Count; i++)
+            {
+                if (EnemyShots2[i].Position.X >= Player.Position.X && EnemyShots2[i].Position.X <= Player.Position.X + 20 &&
+                      EnemyShots2[i].Position.Y >= Player.Position.Y && EnemyShots2[i].Position.Y <= Player.Position.Y + 20)
+                {
+                    if (Player.iLife <= 0)
+                    {
+                        Player.Position.X = 0;
+                        Player.Position.Y = 0;
+                        Player.iLife = 10;
+                    }
+                    else
+                    {
+                        Player.iLife--;
+                    }
+
+                    EnemyShots2.RemoveAt(i);
+                }
+            }
+
             //supprime les tirs
+            //Ennemis
+            for (int i = 0; i < EnemyShots1.Count; i++)
+            {
+                if (EnemyShots1[i].Position.X <= 0 || EnemyShots1[i].Position.X + 8 >= 800 ||
+                    EnemyShots1[i].Position.Y <= 0 || EnemyShots1[i].Position.Y + 8 >= 480)
+                {
+                    EnemyShots1.RemoveAt(i);
+                }
+            }
+            for (int i = 0; i < EnemyShots2.Count; i++)
+            {
+                if (EnemyShots2[i].Position.X <= 0 || EnemyShots2[i].Position.X + 8 >= 800 ||
+                    EnemyShots2[i].Position.Y <= 0 || EnemyShots2[i].Position.Y + 8 >= 480)
+                {
+                    EnemyShots2.RemoveAt(i);
+                }
+            }
+            //Joueur
             for (int i = 0; i < Shots.Count; i++)
             {
                 if (Shots[i].Position.X <= 0 || Shots[i].Position.X + 8 >= 800 ||
@@ -495,9 +557,7 @@ namespace LastArena
             //affichage
             spriteBatch.Begin();
             //Terrain
-            Ground.Draw(spriteBatch);
-            //Joueur
-            Player.DrawAnimation(spriteBatch);
+            Ground.Draw(spriteBatch);        
             //tir
             for (int i = 0; i < Shots.Count; i++)
             {
@@ -506,6 +566,8 @@ namespace LastArena
             //ennemis
             Enemy1.Draw(spriteBatch);
             Enemy2.Draw(spriteBatch);
+            //Joueur
+            Player.DrawAnimation(spriteBatch);
             //Tir des ennemis
             for (int i = 0; i < EnemyShots1.Count; i++)
             {
@@ -515,6 +577,10 @@ namespace LastArena
             {
                 spriteBatch.Draw(EnemyShots2[i].Texture, new Vector2(EnemyShots2[i].Position.X, EnemyShots2[i].Position.Y), Color.White);
             }
+
+            //Texte
+            spriteBatch.DrawString(Font, "VIE : " + Player.iLife , new Vector2(300, 10), Color.White);
+
 
             //Curseur
             if (MouseState.X >= 0 || MouseState.X <= Window.ClientBounds.Width || MouseState.Y >= 0 || MouseState.Y <= Window.ClientBounds.Height)

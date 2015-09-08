@@ -20,6 +20,10 @@ namespace LastArena.Core
         //déclaration
         public Boolean IsPlayerShooting = false;
 
+        //Vie
+        public int iLife = 9;
+
+
         public void Move(KeyboardState state)
         {
             if (state.IsKeyDown(Keys.W))
