@@ -32,6 +32,13 @@ namespace LastArena
         //Curseur
         MouseState MouseState;
         private Texture2D MouseTexture;
+        //tir ennemis
+        List<EnemiesShot> EnemyShots1 = new List<EnemiesShot>();
+        List<EnemiesShot> EnemyShots2 = new List<EnemiesShot>();
+        float fTimeEnemiesShots1 = 0.0f;
+        float fTimeEnemiesShots2 = 0.0f;
+        
+        
         
 
         public Game1()
@@ -78,19 +85,18 @@ namespace LastArena
             Ground.Position = new Vector2(0, 0);
             //Joueur
             Player.Texture = Content.Load<Texture2D>("Player");
-            Player.Position = new Vector2(400, 240);
+            Player.Position = new Vector2(100, 240);
             //Tir
             //Shot.Texture =
             //imgShot = Content.Load<Texture2D>("shot");
             //ennemis
             Enemy1.Texture = Content.Load<Texture2D>("enemy");
-            Enemy1.Position = new Vector2(600, 140);
+            Enemy1.Position = new Vector2(700, 140);
             Enemy2.Texture = Content.Load<Texture2D>("enemy");
-            Enemy2.Position = new Vector2(550, 300);
+            Enemy2.Position = new Vector2(750, 300);
             Enemy1.iRand = Enemy1.rand.Next(2);
             //Curseur
             MouseTexture = Content.Load<Texture2D>("Viseur");
-            
 
         }
 
@@ -116,6 +122,8 @@ namespace LastArena
             // TODO: Add your update logic here
             //Temps
             fTimeShot += gameTime.ElapsedGameTime.Milliseconds;
+            fTimeEnemiesShots1 += gameTime.ElapsedGameTime.Milliseconds;
+            fTimeEnemiesShots2 += gameTime.ElapsedGameTime.Milliseconds;
 
             //récupération des touches
             Player.Move(Keyboard.GetState());
@@ -126,7 +134,7 @@ namespace LastArena
             #region tir
             // tout ce qui est dans cette boucle ne s'execute qu'une seule fois
             // pour créer un nouveau tir
-            if (Player.IsPlayerShooting && fTimeShot >= 200.0f)
+            if (Player.IsPlayerShooting && fTimeShot >= 400.0f)
             {
                 Shots.Add(new Shot(8, 8));
                 Player.IsPlayerShooting = false;
@@ -185,6 +193,10 @@ namespace LastArena
                     #endregion
                     double dblTemp = 1.0 * (MouseState.Y - Player.Position.Y) / (MouseState.X - Player.Position.X );
                     Shots[i].ShotAngle = (MouseState.X - Player.Position.X) > 0 ? Math.Atan(dblTemp) : Math.Atan(dblTemp) + Math.PI;
+                    if (Shots[i].ShotAngle == Math.PI / 2.0 || Shots[i].ShotAngle == 1.5 * Math.PI)
+                    {
+                        Shots[i].ShotAngle = Shots[i].ShotAngle + Math.PI;
+                    }
 
                 }
                    
@@ -248,88 +260,163 @@ namespace LastArena
             }*/
 
 
+            //Tir ennemis
+            if (fTimeEnemiesShots1 >= 2000.0f)
+            {
+                EnemyShots1.Add(new EnemiesShot(8, 8));
+                fTimeEnemiesShots1 = 0.0f;
+
+                for (int i = EnemyShots1.Count - 1; i < EnemyShots1.Count; i++)
+                {
+                    //postion des tirs
+                    EnemyShots1[i].Position.X = Enemy1.Position.X + 4;
+                    EnemyShots1[i].Position.Y = Enemy1.Position.Y + 4;
+                    EnemyShots1[i].Texture = Content.Load<Texture2D>("EnemyShot");
+
+                    //direction
+                    double dblAutre = 1.0 * (Player.Position.Y - Enemy1.Position.Y) / (Player.Position.X - Enemy1.Position.X);
+                    EnemyShots1[i].ShotAngle = (Player.Position.X - Enemy1.Position.X) > 0 ? Math.Atan(dblAutre) : Math.Atan(dblAutre) + Math.PI;
+                    if (EnemyShots1[i].ShotAngle == Math.PI / 2.0 || EnemyShots1[i].ShotAngle == 1.5 * Math.PI)
+                    {
+                        EnemyShots1[i].ShotAngle = EnemyShots1[i].ShotAngle + Math.PI;
+                    }
+                }
+            }
+            //Deplacement
+            for (int i = 0; i < EnemyShots1.Count; i++)
+            {
+                EnemyShots1[i].Position.X += (float)(EnemyShots1[i].ShotSpeed * Math.Cos(EnemyShots1[i].ShotAngle));
+                EnemyShots1[i].Position.Y += (float)(EnemyShots1[i].ShotSpeed * Math.Sin(EnemyShots1[i].ShotAngle));
+            }
+
+            //Tir Ennemi 2
+            if (fTimeEnemiesShots2 >= 2000.0f)
+            {
+                EnemyShots2.Add(new EnemiesShot(8, 8));
+                fTimeEnemiesShots2 = 0.0f;
+
+                for (int i = EnemyShots2.Count - 1; i < EnemyShots2.Count; i++)
+                {
+                    //postion des tirs
+                    EnemyShots2[i].Position.X = Enemy2.Position.X + 4;
+                    EnemyShots2[i].Position.Y = Enemy2.Position.Y + 4;
+                    EnemyShots2[i].Texture = Content.Load<Texture2D>("EnemyShot");
+
+                    //direction
+                    double dblAutre = 1.0 * (Player.Position.Y - Enemy2.Position.Y) / (Player.Position.X - Enemy2.Position.X);
+                    EnemyShots2[i].ShotAngle = (Player.Position.X - Enemy2.Position.X) > 0 ? Math.Atan(dblAutre) : Math.Atan(dblAutre) + Math.PI;
+                    if (EnemyShots2[i].ShotAngle == Math.PI / 2.0 || EnemyShots2[i].ShotAngle == 1.5 * Math.PI)
+                    {
+                        EnemyShots2[i].ShotAngle = EnemyShots2[i].ShotAngle + Math.PI;
+                    }
+                }
+            }
+            //Deplacement
+            for (int i = 0; i < EnemyShots2.Count; i++)
+            {
+                EnemyShots2[i].Position.X += (float)(EnemyShots2[i].ShotSpeed * Math.Cos(EnemyShots2[i].ShotAngle));
+                EnemyShots2[i].Position.Y += (float)(EnemyShots2[i].ShotSpeed * Math.Sin(EnemyShots2[i].ShotAngle));
+            }
+
+
             #endregion
 
             //Joueur
             Player.UpdateFrame(gameTime);
 
             //ennemis
-            #region ennemis           
-
-            if (Enemy1.iRand == 0)
+            #region ennemis     
+            //distance entre les ennemis et le joueur
+            if (Enemy1.Position.X < Player.Position.X + Enemy1.SecureDistance && Enemy1.Position.X > Player.Position.X - Enemy1.SecureDistance &&
+                Enemy1.Position.Y < Player.Position.Y + Enemy1.SecureDistance && Enemy1.Position.Y > Player.Position.Y - Enemy1.SecureDistance)
             {
-                if (Enemy1.Position.X > Player.Position.X)
-                {
-                    Enemy1.Position.X--;
-                }
-                else if (Enemy1.Position.X < Player.Position.X)
-                {
-                    Enemy1.Position.X++;
-                }
-                else if (Enemy1.Position.Y > Player.Position.Y)
-                {
-                    Enemy1.Position.Y--;
-                }
-                else if (Enemy1.Position.Y < Player.Position.Y)
-                {
-                    Enemy1.Position.Y++;
-                }
-            }else
-            {
-                if (Enemy1.Position.Y > Player.Position.Y)
-                {
-                    Enemy1.Position.Y--;
-                }
-                else if (Enemy1.Position.Y < Player.Position.Y)
-                {
-                    Enemy1.Position.Y++;
-                }
-                else if (Enemy1.Position.X > Player.Position.X)
-                {
-                    Enemy1.Position.X--;
-                }
-                else if (Enemy1.Position.X < Player.Position.X)
-                {
-                    Enemy1.Position.X++;
-                }
-            }
-
-            if (Enemy1.iRand == 1)
-            {
-                if (Enemy2.Position.X > Player.Position.X)
-                {
-                    Enemy2.Position.X--;
-                }
-                else if (Enemy2.Position.X < Player.Position.X)
-                {
-                    Enemy2.Position.X++;
-                }
-                else if (Enemy2.Position.Y > Player.Position.Y)
-                {
-                    Enemy2.Position.Y--;
-                }
-                else if (Enemy2.Position.Y < Player.Position.Y)
-                {
-                    Enemy2.Position.Y++;
-                }
+                //rien
             }
             else
             {
-                if (Enemy2.Position.Y > Player.Position.Y)
+                if (Enemy1.iRand == 0)
                 {
-                    Enemy2.Position.Y--;
+                    if (Enemy1.Position.X > Player.Position.X)
+                    {
+                        Enemy1.Position.X--;
+                    }
+                    else if (Enemy1.Position.X < Player.Position.X)
+                    {
+                        Enemy1.Position.X++;
+                    }
+                    else if (Enemy1.Position.Y > Player.Position.Y)
+                    {
+                        Enemy1.Position.Y--;
+                    }
+                    else if (Enemy1.Position.Y < Player.Position.Y)
+                    {
+                        Enemy1.Position.Y++;
+                    }
                 }
-                else if (Enemy2.Position.Y < Player.Position.Y)
+                else
                 {
-                    Enemy2.Position.Y++;
+                    if (Enemy1.Position.Y > Player.Position.Y)
+                    {
+                        Enemy1.Position.Y--;
+                    }
+                    else if (Enemy1.Position.Y < Player.Position.Y)
+                    {
+                        Enemy1.Position.Y++;
+                    }
+                    else if (Enemy1.Position.X > Player.Position.X)
+                    {
+                        Enemy1.Position.X--;
+                    }
+                    else if (Enemy1.Position.X < Player.Position.X)
+                    {
+                        Enemy1.Position.X++;
+                    }
                 }
-                else if (Enemy2.Position.X > Player.Position.X)
+            }
+            if (Enemy2.Position.X < Player.Position.X + Enemy2.SecureDistance && Enemy2.Position.X > Player.Position.X - Enemy2.SecureDistance &&
+                Enemy2.Position.Y < Player.Position.Y + Enemy2.SecureDistance && Enemy2.Position.Y > Player.Position.Y - Enemy2.SecureDistance)
+            {
+                //rien
+            }
+            else
+            {
+                if (Enemy1.iRand == 1)
                 {
-                    Enemy2.Position.X--;
+                    if (Enemy2.Position.X > Player.Position.X)
+                    {
+                        Enemy2.Position.X--;
+                    }
+                    else if (Enemy2.Position.X < Player.Position.X)
+                    {
+                        Enemy2.Position.X++;
+                    }
+                    else if (Enemy2.Position.Y > Player.Position.Y)
+                    {
+                        Enemy2.Position.Y--;
+                    }
+                    else if (Enemy2.Position.Y < Player.Position.Y)
+                    {
+                        Enemy2.Position.Y++;
+                    }
                 }
-                else if (Enemy2.Position.X < Player.Position.X)
+                else
                 {
-                    Enemy2.Position.X++;
+                    if (Enemy2.Position.Y > Player.Position.Y)
+                    {
+                        Enemy2.Position.Y--;
+                    }
+                    else if (Enemy2.Position.Y < Player.Position.Y)
+                    {
+                        Enemy2.Position.Y++;
+                    }
+                    else if (Enemy2.Position.X > Player.Position.X)
+                    {
+                        Enemy2.Position.X--;
+                    }
+                    else if (Enemy2.Position.X < Player.Position.X)
+                    {
+                        Enemy2.Position.X++;
+                    }
                 }
             }
 
@@ -365,7 +452,7 @@ namespace LastArena
                 if (Shots[i].Position.X >= Enemy1.Position.X && Shots[i].Position.X <= Enemy1.Position.X + 20 &&
                     Shots[i].Position.Y >= Enemy1.Position.Y && Shots[i].Position.Y <= Enemy1.Position.Y + 20)
                 {
-                    Enemy1.Position.X = 600;
+                    Enemy1.Position.X = 700;
                     Enemy1.Position.Y = 140;
                     Shots.RemoveAt(i);
                 }
@@ -376,7 +463,7 @@ namespace LastArena
                 if (Shots[i].Position.X >= Enemy2.Position.X && Shots[i].Position.X <= Enemy2.Position.X + 20 &&
                       Shots[i].Position.Y >= Enemy2.Position.Y && Shots[i].Position.Y <= Enemy2.Position.Y + 20)
                 {
-                    Enemy2.Position.X = 550;
+                    Enemy2.Position.X = 750;
                     Enemy2.Position.Y = 300;
                     Shots.RemoveAt(i);
                 }
@@ -419,6 +506,16 @@ namespace LastArena
             //ennemis
             Enemy1.Draw(spriteBatch);
             Enemy2.Draw(spriteBatch);
+            //Tir des ennemis
+            for (int i = 0; i < EnemyShots1.Count; i++)
+            {
+                spriteBatch.Draw(EnemyShots1[i].Texture, new Vector2(EnemyShots1[i].Position.X, EnemyShots1[i].Position.Y), Color.White);
+            }
+            for (int i = 0; i < EnemyShots2.Count; i++)
+            {
+                spriteBatch.Draw(EnemyShots2[i].Texture, new Vector2(EnemyShots2[i].Position.X, EnemyShots2[i].Position.Y), Color.White);
+            }
+
             //Curseur
             if (MouseState.X >= 0 || MouseState.X <= Window.ClientBounds.Width || MouseState.Y >= 0 || MouseState.Y <= Window.ClientBounds.Height)
             {

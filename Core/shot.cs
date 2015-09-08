@@ -18,7 +18,7 @@ namespace LastArena.Core
         //Angle
         public double ShotAngle;
 
-        //vitesse projoectile
+        //vitesse projectile
         public double ShotSpeed = 4.0;
 
         public void Deplacement()

@@ -17,5 +17,6 @@ namespace LastArena.Core
         //random
         public Random rand = new Random();
         public int iRand;
+        public int SecureDistance = 130;
     }
 }
