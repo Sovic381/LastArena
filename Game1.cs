@@ -483,7 +483,7 @@ namespace LastArena
                     {
                         Player.Position.X = 0;
                         Player.Position.Y = 0;
-                        Player.iLife = 10;
+                        Player.iLife = 9;
                     }else
                     {
                         Player.iLife--;
@@ -501,7 +501,7 @@ namespace LastArena
                     {
                         Player.Position.X = 0;
                         Player.Position.Y = 0;
-                        Player.iLife = 10;
+                        Player.iLife = 9;
                     }
                     else
                     {
