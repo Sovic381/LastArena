@@ -38,7 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Core\Enemies.cs" />
+    <Compile Include="Core\Enemy.cs" />
     <Compile Include="Core\EnemiesShot.cs" />
     <Compile Include="Core\GameObject.cs" />
     <Compile Include="Core\Ground.cs" />

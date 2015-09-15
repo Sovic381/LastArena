@@ -17,5 +17,7 @@ namespace LastArena.Core
 
         //vitesse projectile
         public double ShotSpeed = 2.0;
+
+        
     }
 }
