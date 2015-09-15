@@ -15,11 +15,11 @@ namespace LastArena.Core
             frameIndex = framesIndex.RIGHT_1;      
         }
         //random
-        //public Random rand = new Random();
+        Random rand = new Random();
         //public int iRand;
         private int iSecureDistance = 130;
         //Temps entre les tirs
-        private float fShotsTime = 0.0f;
+        private float fShotsTime = 2000.0f;
         //Tirs
         List<EnemiesShot> lEnemyShots = new List<EnemiesShot>();
 
