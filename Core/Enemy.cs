@@ -24,8 +24,8 @@ namespace LastArena.Core
         List<EnemiesShot> lEnemyShots = new List<EnemiesShot>();
         //Poursuite de l'ennemi
         public float PursuitTime = 3000.0f;
-        public int OldPlayerPositionX;
-        public int OldPlayerPositionY;
+        public double OldPlayerPositionX;
+        public double OldPlayerPositionY;
 
         public int SecureDistance
         {

@@ -42,6 +42,9 @@ namespace LastArena
 
         //Texte
         private SpriteFont Font;
+
+        //texture
+        Texture2D imgGameOver;
         
         
         
@@ -107,7 +110,8 @@ namespace LastArena
             MouseTexture = Content.Load<Texture2D>("Viseur");
             //Texte
             Font = Content.Load<SpriteFont>("Font");
-            
+            //GameOver
+            imgGameOver = Content.Load<Texture2D>("GameOver");
         }
 
         /// <summary>
@@ -224,48 +228,50 @@ namespace LastArena
                 else
                 {
                     //Temps avant poursuite
-                /*    if (Enemies[i].PursuitTime <= 0.0f)
+                    if (Enemies[i].PursuitTime <= 0.0f)
                     {
                         Enemies[i].OldPlayerPositionX = Player.Position.X;
                         Enemies[i].OldPlayerPositionY = Player.Position.Y;
-                    }*/
-                    //type de déplacement
-                    if (i % 2 == 0)
-                    {
-                        //type 1
-                        if (Enemies[i].Position.X > Player.Position.X)
-                        {
-                            Enemies[i].Position.X--;
+                        Enemies[i].PursuitTime = 3000.0f - Rand.Next(1000);
+
+                    }
+                    //type de déplacement 
+                    if (i % 2 == 0) 
+                    { 
+                        //type 1 
+                        if (Enemies[i].Position.X > Enemies[i].OldPlayerPositionX) 
+                        { 
+                            Enemies[i].Position.X--; 
                         }
-                        else if (Enemies[i].Position.X < Player.Position.X)
-                        {
-                            Enemies[i].Position.X++;
+                        else if (Enemies[i].Position.X < Enemies[i].OldPlayerPositionX) 
+                        { 
+                            Enemies[i].Position.X++; 
                         }
-                        else if (Enemies[i].Position.Y > Player.Position.Y)
-                        {
-                            Enemies[i].Position.Y--;
+                        else if (Enemies[i].Position.Y > Enemies[i].OldPlayerPositionY) 
+                        { 
+                            Enemies[i].Position.Y--; 
                         }
-                        else if (Enemies[i].Position.Y < Player.Position.Y)
-                        {
-                            Enemies[i].Position.Y++;
-                        }
+                        else if (Enemies[i].Position.Y < Enemies[i].OldPlayerPositionY) 
+                        { 
+                            Enemies[i].Position.Y++; 
+                        } 
                     }
                     else
                     {
                         //type 2
-                        if (Enemies[i].Position.Y > Player.Position.Y)
+                        if (Enemies[i].Position.Y > Enemies[i].OldPlayerPositionY)
                         {
                             Enemies[i].Position.Y--;
                         }
-                        else if (Enemies[i].Position.Y < Player.Position.Y)
+                        else if (Enemies[i].Position.Y < Enemies[i].OldPlayerPositionY)
                         {
                             Enemies[i].Position.Y++;
                         }
-                        else if (Enemies[i].Position.X > Player.Position.X)
+                        else if (Enemies[i].Position.X > Enemies[i].OldPlayerPositionX)
                         {
                             Enemies[i].Position.X--;
                         }
-                        else if (Enemies[i].Position.X < Player.Position.X)
+                        else if (Enemies[i].Position.X < Enemies[i].OldPlayerPositionX)
                         {
                             Enemies[i].Position.X++;
                         }
@@ -293,16 +299,16 @@ namespace LastArena
                         if (iEnemy.EnemyShots[i].ShotAngle == Math.PI / 2.0 || iEnemy.EnemyShots[i].ShotAngle == 1.5 * Math.PI)
                         {
                             iEnemy.EnemyShots[i].ShotAngle = iEnemy.EnemyShots[i].ShotAngle + Math.PI;
-                        }
-                    }
-                }
-
-                for (int i = 0; i < iEnemy.EnemyShots.Count; i++)
-                {
-                    iEnemy.EnemyShots[i].Position.X += (float)(iEnemy.EnemyShots[i].ShotSpeed * Math.Cos(iEnemy.EnemyShots[i].ShotAngle));
-                    iEnemy.EnemyShots[i].Position.Y += (float)(iEnemy.EnemyShots[i].ShotSpeed * Math.Sin(iEnemy.EnemyShots[i].ShotAngle));
-                }
-            }
+                        } 
+                    } 
+                } 
+                 
+                for (int i = 0; i < iEnemy.EnemyShots.Count; i++) 
+                { 
+                    iEnemy.EnemyShots[i].Position.X += (float)(iEnemy.EnemyShots[i].ShotSpeed * Math.Cos(iEnemy.EnemyShots[i].ShotAngle)); 
+                    iEnemy.EnemyShots[i].Position.Y += (float)(iEnemy.EnemyShots[i].ShotSpeed * Math.Sin(iEnemy.EnemyShots[i].ShotAngle)); 
+                } 
+            } 
             
             #endregion
 
@@ -358,14 +364,13 @@ namespace LastArena
             {
                 for (int i = 0; i < iEnemy.EnemyShots.Count; i++)
                 {
-                    if (iEnemy.EnemyShots[i].Position.X >= Player.Position.X && iEnemy.EnemyShots[i].Position.X <= Player.Position.X + 20 &&
+                    if (iEnemy.EnemyShots[i].Position.X >= Player.Position.X - 5 && iEnemy.EnemyShots[i].Position.X <= Player.Position.X + 20 &&
                       iEnemy.EnemyShots[i].Position.Y >= Player.Position.Y && iEnemy.EnemyShots[i].Position.Y <= Player.Position.Y + 20)
                     {
                         if (Player.iLife <= 0)
                         {
-                            Player.Position.X = 0;
-                            Player.Position.Y = 0;
-                            Player.iLife = 9;
+                            //meurt
+                            
                         }
                         else
                         {
@@ -455,6 +460,13 @@ namespace LastArena
                 spriteBatch.Draw(MouseTexture, new Vector2(MouseState.X, MouseState.Y), Color.White);
             }
             
+
+            //GameOver
+            if (Player.iLife <= 0)
+            {
+                spriteBatch.Draw(imgGameOver, new Vector2(0, 0), Color.White);
+            }
+
             spriteBatch.End();
 
 

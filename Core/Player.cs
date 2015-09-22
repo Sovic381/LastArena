@@ -21,7 +21,7 @@ namespace LastArena.Core
         public Boolean IsPlayerShooting = false;
 
         //Vie
-        public int iLife = 9;
+        public int iLife = 10;
 
 
         public void Move(KeyboardState state)
