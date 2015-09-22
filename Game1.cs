@@ -136,6 +136,7 @@ namespace LastArena
             foreach (Enemy iEnemy in Enemies)
             {
                 iEnemy.ShotsTime -= gameTime.ElapsedGameTime.Milliseconds;
+                iEnemy.PursuitTime -= gameTime.ElapsedGameTime.Milliseconds;
             }
 
             //récupération des touches
@@ -186,6 +187,7 @@ namespace LastArena
 
             //ennemis
             #region ennemis  
+            //Vague d'ennemis
             if (Enemies.Count == 0)
             {
                 iNbWave++;
@@ -198,7 +200,7 @@ namespace LastArena
                     inbEnnemisBase++;
                 }
                 inbEnnemisBase++;
-                //Création des ennemis de base
+                //Création des ennemis
                 for (int i = 0; i < inbEnnemisBase; i++)
                 {
                     Enemies.Add(new Enemy(1, 20, 20));
@@ -221,6 +223,12 @@ namespace LastArena
                 }
                 else
                 {
+                    //Temps avant poursuite
+                /*    if (Enemies[i].PursuitTime <= 0.0f)
+                    {
+                        Enemies[i].OldPlayerPositionX = Player.Position.X;
+                        Enemies[i].OldPlayerPositionY = Player.Position.Y;
+                    }*/
                     //type de déplacement
                     if (i % 2 == 0)
                     {
@@ -328,7 +336,7 @@ namespace LastArena
                 for (int j = 0; j < Shots.Count; j++)
                 {
 
-                    if (i == Enemies.Count && i == 0)
+                    if (i == Enemies.Count)
                     {
                         //sécurité bizarre
                     }

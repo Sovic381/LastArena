@@ -22,6 +22,10 @@ namespace LastArena.Core
         private float fShotsTime = 2000.0f;
         //Tirs
         List<EnemiesShot> lEnemyShots = new List<EnemiesShot>();
+        //Poursuite de l'ennemi
+        public float PursuitTime = 3000.0f;
+        public int OldPlayerPositionX;
+        public int OldPlayerPositionY;
 
         public int SecureDistance
         {
