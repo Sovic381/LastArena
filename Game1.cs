@@ -173,9 +173,7 @@ namespace LastArena
                     {
                         Shots[i].ShotAngle = Shots[i].ShotAngle + Math.PI;
                     }
-
-                }
-                   
+                }   
             }
 
             //déplacement
@@ -200,6 +198,10 @@ namespace LastArena
                     if (iNbWave >= 11)
                     {
                         inbEnnemisBase += 3;
+                        if (iNbWave >= 26)
+                        {
+                            inbEnnemisBase += 5;
+                        }
                     }
                     inbEnnemisBase++;
                 }
@@ -209,7 +211,7 @@ namespace LastArena
                 {
                     Enemies.Add(new Enemy(1, 20, 20));
                     Enemies[i].Position.X = 780 - Rand.Next(200);
-                    Enemies[i].Position.Y = 460 - Rand.Next(480);
+                    Enemies[i].Position.Y = 460 - Rand.Next(460);
                 }
                 foreach (Enemy iEnemy in Enemies)
                 {
@@ -348,8 +350,8 @@ namespace LastArena
                     }
                     else
                     {
-                        if (Shots[j].Position.X >= Enemies[i].Position.X && Shots[j].Position.X <= Enemies[i].Position.X + 20 &&
-                            Shots[j].Position.Y >= Enemies[i].Position.Y && Shots[j].Position.Y <= Enemies[i].Position.Y + 20)
+                        if (Shots[j].Position.X >= Enemies[i].Position.X - 5 && Shots[j].Position.X <= Enemies[i].Position.X + 20 &&
+                            Shots[j].Position.Y >= Enemies[i].Position.Y - 5 && Shots[j].Position.Y <= Enemies[i].Position.Y + 20)
                         {
 
                             Enemies.RemoveAt(i);
@@ -365,7 +367,7 @@ namespace LastArena
                 for (int i = 0; i < iEnemy.EnemyShots.Count; i++)
                 {
                     if (iEnemy.EnemyShots[i].Position.X >= Player.Position.X - 5 && iEnemy.EnemyShots[i].Position.X <= Player.Position.X + 20 &&
-                      iEnemy.EnemyShots[i].Position.Y >= Player.Position.Y && iEnemy.EnemyShots[i].Position.Y <= Player.Position.Y + 20)
+                      iEnemy.EnemyShots[i].Position.Y >= Player.Position.Y - 5 && iEnemy.EnemyShots[i].Position.Y <= Player.Position.Y + 20)
                     {
                         if (Player.iLife <= 0)
                         {
