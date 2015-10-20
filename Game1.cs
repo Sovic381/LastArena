@@ -432,8 +432,8 @@ namespace LastArena
                     for (int i = iEnemy.EnemyShots.Count - 1; i < iEnemy.EnemyShots.Count; i++)
                     {
                         //position des tirs
-                        iEnemy.EnemyShots[i].Position.X = iEnemy.Position.X;
-                        iEnemy.EnemyShots[i].Position.Y = iEnemy.Position.Y;
+                        iEnemy.EnemyShots[i].Position.X = iEnemy.Position.X + 5;
+                        iEnemy.EnemyShots[i].Position.Y = iEnemy.Position.Y + 5;
                         iEnemy.EnemyShots[i].Texture = Content.Load<Texture2D>("EnemyShot");
                         //Direction
                         double dblTemp = 1.0 * (Player.Position.Y - iEnemy.Position.Y) / (Player.Position.X - iEnemy.Position.X);
@@ -466,8 +466,8 @@ namespace LastArena
                     for (int i = iEnemy.EnemyShots.Count - 3; i < iEnemy.EnemyShots.Count; i++)
                     {
                         //position des tirs
-                        iEnemy.EnemyShots[i].Position.X = iEnemy.Position.X;
-                        iEnemy.EnemyShots[i].Position.Y = iEnemy.Position.Y;
+                        iEnemy.EnemyShots[i].Position.X = iEnemy.Position.X + 17;
+                        iEnemy.EnemyShots[i].Position.Y = iEnemy.Position.Y + 17;
                         iEnemy.EnemyShots[i].Texture = Content.Load<Texture2D>("EnemyShot");
                         //Direction
                         if (i == iEnemy.EnemyShots.Count - 2)
@@ -721,7 +721,7 @@ namespace LastArena
             }
             else
             {
-            Player.DrawAnimation(spriteBatch);
+                spriteBatch.Draw(Player.Texture, new Vector2(Player.Position.X, Player.Position.Y), Color.White);
             }
 
             //Tir des ennemis
