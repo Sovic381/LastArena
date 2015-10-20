@@ -15,7 +15,7 @@ namespace LastArena.Core
 
 
         public int life = 5;
-        public float BigEnemyShotsTime = 2500.0f;
-        public int BigEnemySecureDistance = 160;
+        public float BigShotsTime = 2500.0f;
+        public int BigSecureDistance = 160;
     }
 }

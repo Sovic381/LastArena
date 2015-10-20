@@ -35,6 +35,8 @@ namespace LastArena
         Random Rand = new Random();
         int inbEnnemisBase = 1;
         List<Enemy> Enemies = new List<Enemy>();
+        //Gros ennemis
+        int inbBigEnnemisBase = 0;
         List<bigenemy> BigEnemies = new List<bigenemy>();
         //Curseur
         MouseState MouseState;
@@ -148,9 +150,9 @@ namespace LastArena
                 iEnemy.PursuitTime -= gameTime.ElapsedGameTime.Milliseconds;
             }
             //Gros ennemis
-            foreach (Enemy iBigEnemy in Enemies)
+            foreach (bigenemy iBigEnemy in BigEnemies)
             {
-                iBigEnemy.ShotsTime -= gameTime.ElapsedGameTime.Milliseconds;
+                iBigEnemy.BigShotsTime -= gameTime.ElapsedGameTime.Milliseconds;
                 iBigEnemy.PursuitTime -= gameTime.ElapsedGameTime.Milliseconds;
             }
 
@@ -231,7 +233,7 @@ namespace LastArena
             }
             */
             //Vague d'ennemis
-            if (Enemies.Count == 0)
+            if (Enemies.Count == 0 && BigEnemies.Count == 0)
             {
                 iNbWave++;
                 if (iNbWave >= 6)
@@ -248,25 +250,28 @@ namespace LastArena
                 }              
                 inbEnnemisBase++;
                 //Création des ennemis
-                //Gros Ennemis
-                if (Rand.Next(5) == 1)
-                {
-                    for (int i = 0; i < 1; i++)
-                    {
-                        BigEnemies.Add(new bigenemy(1, 20, 20));
-                        BigEnemies[i].Position.X = 780 - Rand.Next(200);
-                        BigEnemies[i].Position.Y = 460 - Rand.Next(460);
-                    }
-                    inbEnnemisBase--;
-                }
+                                     
                 for (int i = 0; i < inbEnnemisBase; i++)
                 {
-
                     Enemies.Add(new Enemy(1, 20, 20));
                     Enemies[i].Position.X = 780 - Rand.Next(200);
                     Enemies[i].Position.Y = 460 - Rand.Next(460);
-
+                    //test pour gros ennemis
+                    if (Rand.Next(8)== 1)
+                    {
+                        inbBigEnnemisBase++;
+                        inbEnnemisBase--;
+                    }              
                 }
+
+                //Gros Ennemis   
+                for (int i = 0; i < inbBigEnnemisBase; i++)
+                {
+                    BigEnemies.Add(new bigenemy(1, 20, 20));
+                    BigEnemies[i].Position.X = 780 - Rand.Next(200);
+                    BigEnemies[i].Position.Y = 460 - Rand.Next(460);
+                }
+
                 foreach (Enemy iEnemy in Enemies)
                 {
                     iEnemy.Texture = Content.Load<Texture2D>("enemy");
@@ -348,8 +353,8 @@ namespace LastArena
             for (int i = 0; i < BigEnemies.Count; i++)
             {
 
-                if (BigEnemies[i].Position.X < Player.Position.X + BigEnemies[i].SecureDistance && BigEnemies[i].Position.X > Player.Position.X - BigEnemies[i].SecureDistance &&
-                    BigEnemies[i].Position.Y < Player.Position.Y + BigEnemies[i].SecureDistance && BigEnemies[i].Position.Y > Player.Position.Y - BigEnemies[i].SecureDistance)
+                if (BigEnemies[i].Position.X < Player.Position.X + BigEnemies[i].BigSecureDistance && BigEnemies[i].Position.X > Player.Position.X - BigEnemies[i].BigSecureDistance &&
+                    BigEnemies[i].Position.Y < Player.Position.Y + BigEnemies[i].BigSecureDistance && BigEnemies[i].Position.Y > Player.Position.Y - BigEnemies[i].BigSecureDistance)
                 {
                     //rien
                 }
@@ -389,7 +394,7 @@ namespace LastArena
                         //type 2
                         if (BigEnemies[i].Position.Y > BigEnemies[i].OldPlayerPositionY)
                         {
-                            Enemies[i].Position.Y--;
+                            BigEnemies[i].Position.Y--;
                         }
                         else if (BigEnemies[i].Position.Y < BigEnemies[i].OldPlayerPositionY)
                         {
@@ -417,7 +422,7 @@ namespace LastArena
                 if (iEnemy.ShotsTime <= 0.0f)
                 {
                     iEnemy.EnemyShots.Add(new EnemiesShot(8, 8));
-                    iEnemy.ShotsTime = 2300.0f - Rand.Next(500);
+                    iEnemy.ShotsTime = 3000.0f - Rand.Next(500);
 
                     for (int i = iEnemy.EnemyShots.Count - 1; i < iEnemy.EnemyShots.Count; i++)
                     {
@@ -444,14 +449,14 @@ namespace LastArena
             #endregion
 
             #region GrosEnnemis
-            foreach (Enemy iEnemy in BigEnemies)
+            foreach (bigenemy iEnemy in BigEnemies)
             {
-                if (iEnemy.ShotsTime <= 0.0f)
+                if (iEnemy.BigShotsTime <= 0.0f)
                 {
                     iEnemy.EnemyShots.Add(new EnemiesShot(8, 8));
                     iEnemy.EnemyShots.Add(new EnemiesShot(8, 8));
                     iEnemy.EnemyShots.Add(new EnemiesShot(8, 8));
-                    iEnemy.ShotsTime = 2600.0f - Rand.Next(500);
+                    iEnemy.BigShotsTime = 4000.0f - Rand.Next(1000);
 
                     for (int i = iEnemy.EnemyShots.Count - 3; i < iEnemy.EnemyShots.Count; i++)
                     {
@@ -460,7 +465,7 @@ namespace LastArena
                         iEnemy.EnemyShots[i].Position.Y = iEnemy.Position.Y;
                         iEnemy.EnemyShots[i].Texture = Content.Load<Texture2D>("EnemyShot");
                         //Direction
-                        if (i == iEnemy.EnemyShots.Count - 3)
+                        if (i == iEnemy.EnemyShots.Count - 2)
                         {
                             double dblTemp = 1.0 * (Player.Position.Y - iEnemy.Position.Y) / (Player.Position.X - iEnemy.Position.X);
                             iEnemy.EnemyShots[i].ShotAngle = (Player.Position.X - iEnemy.Position.X) > 0 ? Math.Atan(dblTemp) : Math.Atan(dblTemp) + Math.PI;
@@ -468,9 +473,9 @@ namespace LastArena
                             {
                                 iEnemy.EnemyShots[i].ShotAngle = iEnemy.EnemyShots[i].ShotAngle + Math.PI;
                             }
-                            iEnemy.EnemyShots[i].ShotAngle -= 10.0;
+                            iEnemy.EnemyShots[i].ShotAngle -= 0.25;
                         }
-                        else if (i == iEnemy.EnemyShots.Count - 2)
+                        else if (i == iEnemy.EnemyShots.Count - 1)
                         {
                             double dblTemp = 1.0 * (Player.Position.Y - iEnemy.Position.Y) / (Player.Position.X - iEnemy.Position.X);
                             iEnemy.EnemyShots[i].ShotAngle = (Player.Position.X - iEnemy.Position.X) > 0 ? Math.Atan(dblTemp) : Math.Atan(dblTemp) + Math.PI;
@@ -488,7 +493,7 @@ namespace LastArena
                             {
                                 iEnemy.EnemyShots[i].ShotAngle = iEnemy.EnemyShots[i].ShotAngle + Math.PI;
                             }
-                            iEnemy.EnemyShots[i].ShotAngle += 10.0;
+                            iEnemy.EnemyShots[i].ShotAngle += 0.25;
                         }
                     }
                 }
@@ -554,7 +559,6 @@ namespace LastArena
             {
                 for (int j = 0; j < Shots.Count; j++)
                 {
-
                     if (i == BigEnemies.Count)
                     {
                         //sécurité bizarre
@@ -566,10 +570,10 @@ namespace LastArena
                         {
                             //enleve un point de vie
                             BigEnemies[i].life--;
+                            Shots.RemoveAt(j);
                             if (BigEnemies[i].life <= 0)
                             {
                             BigEnemies.RemoveAt(i);
-                            Shots.RemoveAt(j);
                             }
                         }
                     }
@@ -603,8 +607,8 @@ namespace LastArena
             {
                 for (int i = 0; i < iEnemy.EnemyShots.Count; i++)
                 {
-                    if (iEnemy.EnemyShots[i].Position.X >= Player.Position.X - 5 && iEnemy.EnemyShots[i].Position.X <= Player.Position.X + 35 &&
-                      iEnemy.EnemyShots[i].Position.Y >= Player.Position.Y - 5 && iEnemy.EnemyShots[i].Position.Y <= Player.Position.Y + 35)
+                    if (iEnemy.EnemyShots[i].Position.X >= Player.Position.X - 5 && iEnemy.EnemyShots[i].Position.X <= Player.Position.X + 20 &&
+                      iEnemy.EnemyShots[i].Position.Y >= Player.Position.Y - 5 && iEnemy.EnemyShots[i].Position.Y <= Player.Position.Y + 20)
                     {
                         if (Player.iLife <= 0)
                         {
@@ -683,14 +687,15 @@ namespace LastArena
             }
 
             //ennemis
+            foreach (bigenemy iEnemy in BigEnemies)
+            {
+                iEnemy.Draw(spriteBatch);
+            }
             foreach (Enemy iEnemy in Enemies)
             {
                 iEnemy.Draw(spriteBatch);
             }
-            foreach (Enemy iEnemy in BigEnemies)
-            {
-                iEnemy.Draw(spriteBatch);
-            }
+            
 
             //Joueur
             Player.DrawAnimation(spriteBatch);
@@ -703,7 +708,7 @@ namespace LastArena
                     spriteBatch.Draw(iEnemy.EnemyShots[i].Texture, new Vector2(iEnemy.EnemyShots[i].Position.X, iEnemy.EnemyShots[i].Position.Y), Color.White);
                 }
             }
-            foreach (Enemy iEnemy in BigEnemies)
+            foreach (bigenemy iEnemy in BigEnemies)
             {
                 for (int i = 0; i < iEnemy.EnemyShots.Count; i++)
                 {
