@@ -20,9 +20,15 @@ namespace LastArena.Core
         //déclaration
         public Boolean IsPlayerShooting = false;
 
+        //Frame d'invulnérabilité
+        public float TimeInvincible = 5000.0f;
+
+
         //Vie
         public int  iLife = 10;
 
+        //Souris
+        MouseState MouseState = Mouse.GetState();
 
         public void Move(KeyboardState state)
         {
@@ -46,10 +52,7 @@ namespace LastArena.Core
                 direction = Direction.RIGHT;
                 Position.X += 2;
             }//Tir du joueur
-            if(state.IsKeyDown(Keys.Space))
-            {
-                IsPlayerShooting = true;
-            }
+            
         }
 
 

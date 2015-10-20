@@ -25,6 +25,7 @@ namespace LastArena
 
         //Joueur
         Player Player;
+        Texture2D imgPlayerInvincible;
 
         //tir
         List<Shot> Shots = new List<Shot>();
@@ -47,9 +48,7 @@ namespace LastArena
 
         //texture
         Texture2D imgGameOver;
-        
-        
-        
+              
 
         public Game1()
         {
@@ -100,6 +99,7 @@ namespace LastArena
             //Joueur
             Player.Texture = Content.Load<Texture2D>("Player");
             Player.Position = new Vector2(100, 240);
+            imgPlayerInvincible = Content.Load<Texture2D>("PlayerInvincible");
             //Tir
             //Shot.Texture =
             //imgShot = Content.Load<Texture2D>("shot");
@@ -140,7 +140,8 @@ namespace LastArena
                 Exit();
 
             // TODO: Add your update logic here
-
+            //Joueur
+            Player.TimeInvincible -= gameTime.ElapsedGameTime.Milliseconds;
             //Temps
             fTimeShot += gameTime.ElapsedGameTime.Milliseconds;
             //ennemis
@@ -158,8 +159,12 @@ namespace LastArena
 
             //récupération des touches
             Player.Move(Keyboard.GetState());
+            if (MouseState.LeftButton == ButtonState.Pressed)
+            {
+                Player.IsPlayerShooting = true;
+            }
 
-            //Curseur
+            //Curseur   
             MouseState = Mouse.GetState();
 
             //Tir Joueur
@@ -588,16 +593,22 @@ namespace LastArena
                     if (iEnemy.EnemyShots[i].Position.X >= Player.Position.X - 5 && iEnemy.EnemyShots[i].Position.X <= Player.Position.X + 20 &&
                       iEnemy.EnemyShots[i].Position.Y >= Player.Position.Y - 5 && iEnemy.EnemyShots[i].Position.Y <= Player.Position.Y + 20)
                     {
-                        if (Player.iLife <= 0)
+                        if (Player.TimeInvincible <= 0)
                         {
-                            //meurt
-
+                            if (Player.iLife <= 0)
+                            {
+                                //meurt
+                            }
+                            else
+                            {
+                                Player.iLife--;
+                                Player.TimeInvincible = 1500.0f;
+                            }
                         }
                         else
                         {
-                            Player.iLife--;
+                            //invincible
                         }
-
                         iEnemy.EnemyShots.RemoveAt(i);
                     }
                 }
@@ -610,16 +621,22 @@ namespace LastArena
                     if (iEnemy.EnemyShots[i].Position.X >= Player.Position.X - 5 && iEnemy.EnemyShots[i].Position.X <= Player.Position.X + 20 &&
                       iEnemy.EnemyShots[i].Position.Y >= Player.Position.Y - 5 && iEnemy.EnemyShots[i].Position.Y <= Player.Position.Y + 20)
                     {
-                        if (Player.iLife <= 0)
+                        if (Player.TimeInvincible <= 0)
                         {
-                            //meurt
-
+                            if (Player.iLife <= 0)
+                            {
+                                //meurt
+                            }
+                            else
+                            {
+                                Player.iLife--;
+                                Player.TimeInvincible = 1500.0f;
+                            }
                         }
                         else
                         {
-                            Player.iLife--;
+                            //invicible
                         }
-
                         iEnemy.EnemyShots.RemoveAt(i);
                     }
                 }
@@ -698,7 +715,14 @@ namespace LastArena
             
 
             //Joueur
+            if (Player.TimeInvincible >= 0)
+            {
+                spriteBatch.Draw(imgPlayerInvincible, new Vector2(Player.Position.X, Player.Position.Y), Color.White);
+            }
+            else
+            {
             Player.DrawAnimation(spriteBatch);
+            }
 
             //Tir des ennemis
             foreach (Enemy iEnemy in Enemies)
