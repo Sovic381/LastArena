@@ -40,13 +40,13 @@ namespace LastArena
         int inbBigEnnemisBase = 0;
         List<BigEnemy> BigEnemies = new List<BigEnemy>();
         //Curseur
-        MouseState MouseState;
+        MouseState StateMouse;
         private Texture2D MouseTexture;
 
         //Texte
         private SpriteFont Font;
 
-        //texture
+        //état GameOver
         Texture2D imgGameOver;
               
 
@@ -162,13 +162,13 @@ namespace LastArena
 
             //récupération des touches
             Player.Move(Keyboard.GetState());
-            if (MouseState.LeftButton == ButtonState.Pressed)
+            if (StateMouse.LeftButton == ButtonState.Pressed)
             {
                 Player.IsPlayerShooting = true;
             }
 
             //recupération du curseur  
-            MouseState = Mouse.GetState();
+            StateMouse = Mouse.GetState();
 
             //Tir Joueur
             #region tir
@@ -188,8 +188,8 @@ namespace LastArena
                     Shots[i].Texture = Content.Load<Texture2D>("shot");
 
                     //direction des tirs
-                    double dblTemp = 1.0 * (MouseState.Y - Player.Position.Y) / (MouseState.X - Player.Position.X);
-                    Shots[i].ShotAngle = (MouseState.X - Player.Position.X) > 0 ? Math.Atan(dblTemp) : Math.Atan(dblTemp) + Math.PI;
+                    double dblTemp = 1.0 * (StateMouse.Y - Player.Position.Y) / (StateMouse.X - Player.Position.X);
+                    Shots[i].ShotAngle = (StateMouse.X - Player.Position.X) > 0 ? Math.Atan(dblTemp) : Math.Atan(dblTemp) + Math.PI;
                     if (Shots[i].ShotAngle == Math.PI / 2.0 || Shots[i].ShotAngle == 1.5 * Math.PI)
                     {
                         Shots[i].ShotAngle = Shots[i].ShotAngle + Math.PI;
@@ -720,9 +720,9 @@ namespace LastArena
             spriteBatch.DrawString(Font, "Vague : " + iNbWave, new Vector2(300, 30),Color.White);
 
             //Curseur
-            if (MouseState.X >= 0 || MouseState.X <= Window.ClientBounds.Width || MouseState.Y >= 0 || MouseState.Y <= Window.ClientBounds.Height)
+            if (StateMouse.X >= 0 || StateMouse.X <= Window.ClientBounds.Width || StateMouse.Y >= 0 || StateMouse.Y <= Window.ClientBounds.Height)
             {
-                spriteBatch.Draw(MouseTexture, new Vector2(MouseState.X, MouseState.Y), Color.White);
+                spriteBatch.Draw(MouseTexture, new Vector2(StateMouse.X, StateMouse.Y), Color.White);
             }
             
 

@@ -28,8 +28,10 @@ namespace LastArena.Core
         public int  iLife = 10;
 
         //Souris
-        MouseState MouseState = Mouse.GetState();
+        MouseState StateMouse = Mouse.GetState();
 
+        //déplacement du joueur
+        //la direction sert pour les animations et l'ancien système de tir
         public void Move(KeyboardState state)
         {
             if (state.IsKeyDown(Keys.W))

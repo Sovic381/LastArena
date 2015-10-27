@@ -87,7 +87,9 @@ namespace LastArena.Core
         //affichage
         public void Draw(SpriteBatch spriteBatch)
         {
+           
             spriteBatch.Draw(Texture, Position, Color.White);
+            
         }
 
         //affichage animation
