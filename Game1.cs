@@ -494,9 +494,9 @@ namespace LastArena
                 Player.Position.X = 0;
             }
 
-            if (Player.Position.X + 20 > Window.ClientBounds.Width)
+            if (Player.Position.X + 20 > 800)
             {
-                Player.Position.X = Window.ClientBounds.Width - 20;
+                Player.Position.X = 780;
             }
 
             if (Player.Position.Y < 0)
@@ -504,9 +504,9 @@ namespace LastArena
                 Player.Position.Y = 0;
             }
 
-            if (Player.Position.Y + 20 > Window.ClientBounds.Height)
+            if (Player.Position.Y + 20 > 480)
             {
-                Player.Position.Y = Window.ClientBounds.Height - 20;
+                Player.Position.Y = 460;
             }
 
             //Tue les ennemis
