@@ -5,9 +5,9 @@ using System.Text;
 
 namespace LastArena.Core
 {
-    class bigenemy : Enemy
+    class BigEnemy : Enemy
     {
-        public bigenemy(int totalAnimationFrames, int frameWidth, int frameHeight)
+        public BigEnemy(int totalAnimationFrames, int frameWidth, int frameHeight)
             : base(totalAnimationFrames, frameWidth, frameHeight)
         {
               

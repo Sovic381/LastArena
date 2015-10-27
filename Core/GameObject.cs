@@ -21,7 +21,7 @@ namespace LastArena.Core
         //selon tuto
         public framesIndex frameIndex;
 
-        //Index des Images pour animation (pour l'instant selon tuto)
+        //Index des Images pour animation (non utilisé)
         public enum framesIndex
         {
             RIGHT_1 = 0,

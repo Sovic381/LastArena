@@ -38,7 +38,7 @@ namespace LastArena
         List<Enemy> Enemies = new List<Enemy>();
         //Gros ennemis
         int inbBigEnnemisBase = 0;
-        List<bigenemy> BigEnemies = new List<bigenemy>();
+        List<BigEnemy> BigEnemies = new List<BigEnemy>();
         //Curseur
         MouseState MouseState;
         private Texture2D MouseTexture;
@@ -140,6 +140,8 @@ namespace LastArena
                 Exit();
 
             // TODO: Add your update logic here
+            #region Temps
+            //incrémentation (ou décrementation) des timers en millisecondes
             //Joueur
             Player.TimeInvincible -= gameTime.ElapsedGameTime.Milliseconds;
             //Temps
@@ -151,11 +153,12 @@ namespace LastArena
                 iEnemy.PursuitTime -= gameTime.ElapsedGameTime.Milliseconds;
             }
             //Gros ennemis
-            foreach (bigenemy iBigEnemy in BigEnemies)
+            foreach (BigEnemy iBigEnemy in BigEnemies)
             {
                 iBigEnemy.BigShotsTime -= gameTime.ElapsedGameTime.Milliseconds;
                 iBigEnemy.PursuitTime -= gameTime.ElapsedGameTime.Milliseconds;
             }
+            #endregion
 
             //récupération des touches
             Player.Move(Keyboard.GetState());
@@ -164,7 +167,7 @@ namespace LastArena
                 Player.IsPlayerShooting = true;
             }
 
-            //Curseur   
+            //recupération du curseur  
             MouseState = Mouse.GetState();
 
             //Tir Joueur
@@ -207,37 +210,8 @@ namespace LastArena
 
             //ennemis
             #region ennemis
-            /*     //Vague d'ennemis
-            if (Enemies.Count == 0)
-            {
-                iNbWave++;
-                if (iNbWave >= 6)
-                {
-                    if (iNbWave >= 11)
-                    {
-                        inbEnnemisBase += 3;
-                        if (iNbWave >= 21)
-                        {
-                            inbEnnemisBase += 5;
-                        }
-                    }
-                    inbEnnemisBase++;
-                }              
-                inbEnnemisBase++;
-                //Création des ennemis
-                for (int i = 0; i < inbEnnemisBase; i++)
-                {
-                    Enemies.Add(new Enemy(1, 20, 20));
-                    Enemies[i].Position.X = 780 - Rand.Next(200);
-                    Enemies[i].Position.Y = 460 - Rand.Next(460);
-                }
-                foreach (Enemy iEnemy in Enemies)
-                {
-                    iEnemy.Texture = Content.Load<Texture2D>("enemy");
-                }
-            }
-            */
-            //Vague d'ennemis
+            
+            //Vague
             if (Enemies.Count == 0 && BigEnemies.Count == 0)
             {
                 iNbWave++;
@@ -254,8 +228,8 @@ namespace LastArena
                     inbEnnemisBase++;
                 }              
                 inbEnnemisBase++;
-                //Création des ennemis
-                                     
+
+                //Création des ennemis                        
                 for (int i = 0; i < inbEnnemisBase; i++)
                 {
                     Enemies.Add(new Enemy(1, 20, 20));
@@ -272,7 +246,7 @@ namespace LastArena
                 //Gros Ennemis   
                 for (int i = 0; i < inbBigEnnemisBase; i++)
                 {
-                    BigEnemies.Add(new bigenemy(1, 20, 20));
+                    BigEnemies.Add(new BigEnemy(1, 20, 20));
                     BigEnemies[i].Position.X = 780 - Rand.Next(200);
                     BigEnemies[i].Position.Y = 460 - Rand.Next(460);
                 }
@@ -287,8 +261,7 @@ namespace LastArena
                 }
             }
 
-            //création des ennemis
-            
+            //déplacement des ennemis          
 
             #region EnnemisNormaux
             for (int i = 0; i < Enemies.Count; i++)
@@ -454,7 +427,7 @@ namespace LastArena
             #endregion
 
             #region GrosEnnemis
-            foreach (bigenemy iEnemy in BigEnemies)
+            foreach (BigEnemy iEnemy in BigEnemies)
             {
                 if (iEnemy.BigShotsTime <= 0.0f)
                 {
@@ -585,7 +558,7 @@ namespace LastArena
                 }
             }
 
-            //tue le joueur
+            //ennemis normaux tue le joueur
             foreach (Enemy iEnemy in Enemies)
             {
                 for (int i = 0; i < iEnemy.EnemyShots.Count; i++)
@@ -601,6 +574,7 @@ namespace LastArena
                             }
                             else
                             {
+                                //perd de la vie
                                 Player.iLife--;
                                 Player.TimeInvincible = 1500.0f;
                             }
@@ -629,6 +603,7 @@ namespace LastArena
                             }
                             else
                             {
+                                //perd de la vie
                                 Player.iLife--;
                                 Player.TimeInvincible = 1500.0f;
                             }
@@ -666,7 +641,7 @@ namespace LastArena
                 }
             }
 
-            //Joueur
+            //supprime les tirs du joueur
             for (int i = 0; i < Shots.Count; i++)
             {
                 if (Shots[i].Position.X <= 0 || Shots[i].Position.X + 8 >= 800 ||
@@ -704,7 +679,7 @@ namespace LastArena
             }
 
             //ennemis
-            foreach (bigenemy iEnemy in BigEnemies)
+            foreach (BigEnemy iEnemy in BigEnemies)
             {
                 iEnemy.Draw(spriteBatch);
             }
@@ -732,7 +707,7 @@ namespace LastArena
                     spriteBatch.Draw(iEnemy.EnemyShots[i].Texture, new Vector2(iEnemy.EnemyShots[i].Position.X, iEnemy.EnemyShots[i].Position.Y), Color.White);
                 }
             }
-            foreach (bigenemy iEnemy in BigEnemies)
+            foreach (BigEnemy iEnemy in BigEnemies)
             {
                 for (int i = 0; i < iEnemy.EnemyShots.Count; i++)
                 {
