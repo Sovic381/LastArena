@@ -262,7 +262,7 @@ namespace LastArena
                     Enemies[i].Position.X = 780 - Rand.Next(200);
                     Enemies[i].Position.Y = 460 - Rand.Next(460);
                     //test pour gros ennemis
-                    if (Rand.Next(8)== 1)
+                    if (Rand.Next(10)== 1)
                     {
                         inbBigEnnemisBase++;
                         inbEnnemisBase--;
@@ -478,7 +478,7 @@ namespace LastArena
                             {
                                 iEnemy.EnemyShots[i].ShotAngle = iEnemy.EnemyShots[i].ShotAngle + Math.PI;
                             }
-                            iEnemy.EnemyShots[i].ShotAngle -= 0.25;
+                            iEnemy.EnemyShots[i].ShotAngle -= 0.5;
                         }
                         else if (i == iEnemy.EnemyShots.Count - 1)
                         {
@@ -498,7 +498,7 @@ namespace LastArena
                             {
                                 iEnemy.EnemyShots[i].ShotAngle = iEnemy.EnemyShots[i].ShotAngle + Math.PI;
                             }
-                            iEnemy.EnemyShots[i].ShotAngle += 0.25;
+                            iEnemy.EnemyShots[i].ShotAngle += 0.5;
                         }
                     }
                 }
